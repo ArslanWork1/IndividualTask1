@@ -16,12 +16,12 @@
         <main>
             <div v-for="lesson in lessons">
                 <div class="row">
-                    <div class="col-md-5 col-md-offset-0">
+                    <div class="col-md-2 col-md-offset-0">
                         <figure>
                             <img class="lesson" v-bind:src="lesson.image">
                         </figure>
                     </div>
-                    <div class="col-md-6 col-md-offset-0 description">
+                    <div class="col-md-2 col-md-offset-0 description">
                         <h1 v-text="lesson.subject"></h1>
                         <p v-text="lesson.location"></p>
                         <p v-text="lesson.price"></p>
