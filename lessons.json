@@ -6,7 +6,7 @@
             "location": "London",
             "price": 100,
             "space": 10,
-            "image": "/img/maths.png"
+            "image": "img/maths.png"
         },
         {
             "id": 1002,
@@ -14,7 +14,7 @@
             "location": "London",
             "price": 90,
             "space": 10,
-            "image": "/img/eng.png"
+            "image": "img/eng.png"
         },
         {
             "id": 1003,
@@ -22,7 +22,7 @@
             "location": "Bristol",
             "price": 50,
             "space": 10,
-            "image": "/img/geo.jpg"
+            "image": "img/geo.jpg"
         },
         {
             "id": 1004,
@@ -30,7 +30,7 @@
             "location": "London",
             "price": 100,
             "space": 10,
-            "image": "/img/js.png"
+            "image": "img/js.png"
         },
         {
             "id": 1005,
@@ -38,7 +38,7 @@
             "location": "Cambridge",
             "price": 90,
             "space": 10,
-            "image": "/img/music.png"
+            "image": "img/music.png"
         },
         {
             "id": 1006,
@@ -46,7 +46,7 @@
             "location": "London",
             "price": 150,
             "space": 10,
-            "image": "/img/elect.png"
+            "image": "img/elect.png"
         },
         {
             "id": 1007,
@@ -54,7 +54,7 @@
             "location": "Leeds",
             "price": 80,
             "space": 10,
-            "image": "/img/pho.png"
+            "image": "img/pho.png"
         },
         {
             "id": 1008,
@@ -62,7 +62,7 @@
             "location": "London",
             "price": 100,
             "space": 10,
-            "image": "/img/che.png"
+            "image": "img/che.png"
         },
         {
             "id": 1009,
@@ -70,7 +70,7 @@
             "location": "Cambridge",
             "price": 100,
             "space": 10,
-            "image": "/img/rob.jpg"
+            "image": "img/rob.jpg"
         },
         {
             "id": 1010,
@@ -78,7 +78,7 @@
             "location": "London",
             "price": 100,
             "space": 10,
-            "image": "/img/dan.jpg"
+            "image": "img/dan.jpg"
         }
     ]
 }
