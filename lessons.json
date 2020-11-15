@@ -1,11 +1,12 @@
 {
     "lessons": [
         {
+            "id": 1001,
             "subject": "Math",
             "location": "London",
             "price": 100,
-            "space": 5,
-            "image": ""
+            "space": 10,
+            "image": "/img/maths.png"
         }
     ]
 }
