@@ -14,19 +14,44 @@
 <body>
     <div id="app">
         <main>
-            <div v-for="lesson in lessons">
-                <div class="row">
+            <div v-if="showLessons">
+                <div class="row form-group">
                     <div class="col-md-2 col-md-offset-0">
-                        <figure>
-                            <img class="lesson" v-bind:src="lesson.image">
-                        </figure>
-                    </div>
-                    <div class="col-md-2 col-md-offset-0 description">
-                        <h1 v-text="lesson.subject"></h1>
-                        <p v-text="lesson.location"></p>
-                        <p v-text="lesson.price"></p>
+                        <strong>Sort by:</strong>
+                        <select v-model="sortedByOption" class="form-control">
+                            <option v-for="sortBy in sortedBy">
+                                {{sortBy}}
+                            </option>
+                        </select>
+                        <select v-model="orderBy" class="form-control">
+                            <option value="acsending">acsending</option>
+                            <option value="descending">descending</option>
+                        </select>
                     </div>
                 </div>
+                <div v-for="lesson in lessons">
+                    <div class="row">
+                        <div class="col-md-2 col-md-offset-0">
+                            <figure>
+                                <img class="lesson" v-bind:src="lesson.image">
+                            </figure>
+                        </div>
+                        <div class="col-md-2 col-md-offset-0 description">
+                            <h3 v-text="lesson.subject"></h3>
+                            <p>Location: {{lesson.location}}</p>
+                            <p>Price: £{{lesson.price}}</p>
+                            <p>Spaces: {{lesson.space}}</p>
+
+                            <button class=" btn btn-primary " v-on:click="addToCart(lesson)"
+                                v-if="canAddToCart(lesson)">Add to cart</button>
+                            <button disabled="true" class=" btn btn-primary" v-else>Add to cart</button>
+                            <span class="inventory-message" v-if="lesson.space === 0">All Out!
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </main>
     </div>
 
@@ -37,14 +62,98 @@
             el: '#app',
             data: {
                 sitename: "Lessons",
-                lessons: {}
+                showLessons: true,
+                lessons: {},
+                cart: [],
+                sortedBy: [
+                    "subject",
+                    "location",
+                    "price",
+                    "space"
+                ], 
+                sortedByOption: "subject",
+                orderBy: "acsending"
+            },
+
+            methods: {
+                addToCart(aLesson) {
+                    aLesson.space--;
+                    this.cart.push(aLesson.id);
+                    console.log(this.cartCount(aLesson.id) + " " + aLesson.space);
+                },
+
+                canAddToCart(aLesson) {
+                    return aLesson.space != 0;
+                },
+
+                cartCount(id) {
+                    let count = 0;
+                    for (var i = 0; i < this.cart.length; i++) {
+                        if (this.cart[i] === id) {
+                            count++;
+                        }
+                    }
+                    return count;
+                },
+
+                sortBy: function (array, param, order) {
+                    let filterA, filterB;
+                    return array.sort(function (a, b) {
+                        switch (param) {
+                            case 'subject':
+                                filterA = a.subject;
+                                filterB = b.subject;
+                                break;
+                            case 'location':
+                                filterA = a.location;
+                                filterB = b.location;
+                                break;
+                            case 'price':
+                                filterA = a.price;
+                                filterB = b.price;
+                                break;
+                            case 'space':
+                                filterA = a.space;
+                                filterB = b.space;
+                                break;
+                        }
+                        if (order == "acsending") {
+                            return (filterA > filterB) ? 1 : -1;
+                        } else {
+                            return (filterA < filterB) ? 1 : -1;
+                        }
+                    });
+                }
+            },
+
+            computed: {
+
+                defaultSort: function () {
+                    if (this.lessons.length > 0){
+                
+                        this.sortBy(this.lessons, sortedByOption, this.orderBy);
+                    }
+                }
+
+                
+            },
+
+            watch: {
+                sortedByOption: function (val) {
+                    this.sortBy(this.lessons, val, this.orderBy);
+                },
+
+                orderBy: function(){
+                    this.sortBy(this.lessons, this.sortedByOption, this.orderBy);
+                }
+
             },
 
             created: function () {
                 axios.get('./lessons.json')
                     .then((response) => {
                         this.lessons = response.data.lessons;
-                        console.log(this.lessons);
+                        this.sortBy(this.lessons, this.sortedByOption, this.orderBy);
                     });
             },
         });
