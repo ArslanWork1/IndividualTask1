@@ -28,6 +28,11 @@
                             <option value="descending">descending</option>
                         </select>
                     </div>
+                    <div class="col-md-2 col-md-offset-0 cart">
+                        <button type="button" class="btn btn-default btn-lg" v-on:click="showCheckout" v-show="cartItemCount">
+                            <span class="glyphicon glyphicon-shopping-cart">{{cartItemCount}}</span> Checkout
+                        </button>
+                    </div>
                 </div>
                 <div v-for="lesson in lessons">
                     <div class="row">
@@ -70,7 +75,7 @@
                     "location",
                     "price",
                     "space"
-                ], 
+                ],
                 sortedByOption: "subject",
                 orderBy: "acsending"
             },
@@ -80,6 +85,10 @@
                     aLesson.space--;
                     this.cart.push(aLesson.id);
                     console.log(this.cartCount(aLesson.id) + " " + aLesson.space);
+                },
+
+                showCheckout() {
+                    this.showLessons = this.showLessons ? false : true;
                 },
 
                 canAddToCart(aLesson) {
@@ -128,14 +137,9 @@
 
             computed: {
 
-                defaultSort: function () {
-                    if (this.lessons.length > 0){
-                
-                        this.sortBy(this.lessons, sortedByOption, this.orderBy);
-                    }
+                cartItemCount() {
+                    return this.cart.length || '';
                 }
-
-                
             },
 
             watch: {
@@ -143,7 +147,7 @@
                     this.sortBy(this.lessons, val, this.orderBy);
                 },
 
-                orderBy: function(){
+                orderBy: function () {
                     this.sortBy(this.lessons, this.sortedByOption, this.orderBy);
                 }
 
