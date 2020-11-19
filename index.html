@@ -73,7 +73,7 @@
                     <strong>Phone Number</strong>
                     <input v-model="phoneNumber" />
 
-                    <button class=" btn btn-primary" v-if="firstNameCorrect && phoneNumberCorrect">Checkout</button>
+                    <button class=" btn btn-primary" v-if="firstNameCorrect && phoneNumberCorrect && cart.length">Checkout</button>
                 </div>
 
                 <div v-for="lesson in cart">
@@ -85,7 +85,7 @@
                         </div>
                         <div class="col-md-2 col-md-offset-0 description">
                             <h3 v-text="lesson.subject"></h3>
-                            <p>Location: {{lesson.id}}</p>
+                            <p>Location: {{lesson.location}}</p>
                             <p>Price: £{{lesson.price}}</p>
 
                             <button class=" btn btn-primary " v-on:click="removeFromCart(lesson)">Remove</button>
