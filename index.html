@@ -15,6 +15,7 @@
     <div id="app">
         <main>
             <div v-if="showLessons">
+                <h2>Lessons</h2>
                 <div class="row form-group">
                     <div class="col-md-2 col-md-offset-0">
                         <strong>Sort by:</strong>
@@ -29,7 +30,8 @@
                         </select>
                     </div>
                     <div class="col-md-2 col-md-offset-0 cart">
-                        <button type="button" class="btn btn-default btn-lg" v-on:click="showCheckout" v-show="cartItemCount">
+                        <button type="button" class="btn btn-default btn-lg" v-on:click="showCheckout"
+                            v-show="cartItemCount">
                             <span class="glyphicon glyphicon-shopping-cart">{{cartItemCount}}</span> Checkout
                         </button>
                     </div>
@@ -50,13 +52,46 @@
                             <button class=" btn btn-primary " v-on:click="addToCart(lesson)"
                                 v-if="canAddToCart(lesson)">Add to cart</button>
                             <button disabled="true" class=" btn btn-primary" v-else>Add to cart</button>
-                            <span class="inventory-message" v-if="lesson.space === 0">All Out!
+                            <span v-if="lesson.space === 0">All Out!
                             </span>
                         </div>
                     </div>
 
                 </div>
             </div>
+            <div v-else>
+                <h2>Shopping Cart</h2>
+
+                <button type="button" class="btn btn-default btn-lg" v-on:click="showCheckout">
+                    <span class="glyphicon glyphicon-shopping-cart">{{cartItemCount}}</span> Back to Lessons
+                </button>
+
+                <div>
+                    <strong>First Name:</strong>
+                    <input type="text" v-model="firstName" />
+
+                    <strong>Phone Number</strong>
+                    <input v-model="phoneNumber" />
+
+                    <button class=" btn btn-primary" v-if="firstNameCorrect && phoneNumberCorrect">Checkout</button>
+                </div>
+
+                <div v-for="lesson in cart">
+                    <div class="row">
+                        <div class="col-md-2 col-md-offset-0">
+                            <figure>
+                                <img class="lesson" v-bind:src="lesson.image">
+                            </figure>
+                        </div>
+                        <div class="col-md-2 col-md-offset-0 description">
+                            <h3 v-text="lesson.subject"></h3>
+                            <p>Location: {{lesson.id}}</p>
+                            <p>Price: £{{lesson.price}}</p>
+
+                            <button class=" btn btn-primary " v-on:click="removeFromCart(lesson)">Remove</button>
+                        </div>
+
+                    </div>
         </main>
     </div>
 
@@ -68,7 +103,7 @@
             data: {
                 sitename: "Lessons",
                 showLessons: true,
-                lessons: {},
+                lessons: [],
                 cart: [],
                 sortedBy: [
                     "subject",
@@ -77,14 +112,28 @@
                     "space"
                 ],
                 sortedByOption: "subject",
-                orderBy: "acsending"
+                orderBy: "acsending",
+
+                firstName: '',
+                phoneNumber: '',
+
+                firstNameCorrect: false,
+                phoneNumberCorrect: false
             },
 
             methods: {
                 addToCart(aLesson) {
                     aLesson.space--;
-                    this.cart.push(aLesson.id);
-                    console.log(this.cartCount(aLesson.id) + " " + aLesson.space);
+                    this.cart.push(aLesson);
+                },
+
+                removeFromCart(aLesson) {
+                    aLesson.space++;
+
+                    let index = this.cart.indexOf(aLesson);
+                    if (index > -1) {
+                        this.cart.splice(index, 1);
+                    }
                 },
 
                 showCheckout() {
@@ -93,16 +142,6 @@
 
                 canAddToCart(aLesson) {
                     return aLesson.space != 0;
-                },
-
-                cartCount(id) {
-                    let count = 0;
-                    for (var i = 0; i < this.cart.length; i++) {
-                        if (this.cart[i] === id) {
-                            count++;
-                        }
-                    }
-                    return count;
                 },
 
                 sortBy: function (array, param, order) {
@@ -132,6 +171,22 @@
                             return (filterA < filterB) ? 1 : -1;
                         }
                     });
+                },
+
+                validateNumber(val) {
+                    if (/^[0-9]+$/.test(val) && val.length >= 11) {
+                        this.phoneNumberCorrect = true;
+                    } else {
+                        this.phoneNumberCorrect = false;
+                    }
+                },
+
+                validateName(val) {
+                    if (/^[A-Za-z\s]+$/.test(val) && val.length >= 1) {
+                        this.firstNameCorrect = true;
+                    } else {
+                        this.firstNameCorrect = false;
+                    }
                 }
             },
 
@@ -139,16 +194,24 @@
 
                 cartItemCount() {
                     return this.cart.length || '';
-                }
+                },
             },
 
             watch: {
-                sortedByOption: function (val) {
-                    this.sortBy(this.lessons, val, this.orderBy);
+                sortedByOption: function () {
+                    this.sortBy(this.lessons, this.sortedByOption, this.orderBy);
                 },
 
                 orderBy: function () {
                     this.sortBy(this.lessons, this.sortedByOption, this.orderBy);
+                },
+
+                phoneNumber: function () {
+                    this.validateNumber(this.phoneNumber);
+                },
+
+                firstName: function () {
+                    this.validateName(this.firstName);
                 }
 
             },
